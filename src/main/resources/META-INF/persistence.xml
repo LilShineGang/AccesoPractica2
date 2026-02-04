@@ -8,6 +8,13 @@
 
     <persistence-unit name="default" transaction-type="RESOURCE_LOCAL">
         <provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
+        <class>org.example.Locale</class>
+        <class>org.example.Localidade</class>
+        <class>org.example.Multimedia</class>
+        <class>org.example.Propiedade</class>
+        <class>org.example.Provincia</class>
+        <class>org.example.Terreno</class>
+        <class>org.example.Vivienda</class>
 
         <properties>
             <property
@@ -34,7 +41,7 @@
             <property name="hibernate.show_sql" value="true" />
             <property name="hibernate.format_sql" value="true" />
 
-            <property name="hibernate.hbm2ddl.auto" value="none" />
+            <property name="hibernate.hbm2ddl.auto" value="validate" />
         </properties>
     </persistence-unit>
 </persistence>
