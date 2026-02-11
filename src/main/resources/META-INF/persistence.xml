@@ -8,13 +8,13 @@
 
     <persistence-unit name="default" transaction-type="RESOURCE_LOCAL">
         <provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
-        <class>org.example.Locale</class>
-        <class>org.example.Localidade</class>
-        <class>org.example.Multimedia</class>
-        <class>org.example.Propiedade</class>
-        <class>org.example.Provincia</class>
-        <class>org.example.Terreno</class>
-        <class>org.example.Vivienda</class>
+        <class>org.example.entities.LocalesJPA</class>
+        <class>org.example.entities.LocalidadesJPA</class>
+        <class>org.example.entities.MultimediaJPA</class>
+        <class>org.example.entities.PropiedadesJPA</class>
+        <class>org.example.entities.ProvinciaJPA</class>
+        <class>org.example.entities.TerrenoJPA</class>
+        <class>org.example.entities.ViviendaJPA</class>
 
         <properties>
             <property
@@ -23,7 +23,7 @@
             />
             <property
                 name="jakarta.persistence.jdbc.url"
-                value="jdbc:postgresql://localhost:5432/inmo"
+                value="jdbc:postgresql://localhost:5432/postgres"
             />
             <property
                 name="jakarta.persistence.jdbc.user"
@@ -41,7 +41,7 @@
             <property name="hibernate.show_sql" value="true" />
             <property name="hibernate.format_sql" value="true" />
 
-            <property name="hibernate.hbm2ddl.auto" value="validate" />
+            <property name="hibernate.hbm2ddl.auto" value="update" />
         </properties>
     </persistence-unit>
 </persistence>

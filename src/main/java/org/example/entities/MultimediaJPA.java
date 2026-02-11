@@ -1,4 +1,4 @@
-package org.example;
+package org.example.entities;
 
 import jakarta.persistence.*;
 import org.hibernate.annotations.ColumnDefault;
@@ -9,7 +9,7 @@ import java.util.UUID;
 
 @Entity
 @Table(name = "multimedia")
-public class Multimedia {
+public class MultimediaJPA {
     @Id
     @Column(name = "id", nullable = false)
     private UUID id;
@@ -17,7 +17,7 @@ public class Multimedia {
     @ManyToOne(fetch = FetchType.LAZY)
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name = "propiedad_id")
-    private Propiedade propiedad;
+    private PropiedadesJPA propiedad;
 
     @Column(name = "fichero", nullable = false)
     private String fichero;
@@ -38,11 +38,11 @@ public class Multimedia {
         this.id = id;
     }
 
-    public Propiedade getPropiedad() {
+    public PropiedadesJPA getPropiedad() {
         return propiedad;
     }
 
-    public void setPropiedad(Propiedade propiedad) {
+    public void setPropiedad(PropiedadesJPA propiedad) {
         this.propiedad = propiedad;
     }
 
