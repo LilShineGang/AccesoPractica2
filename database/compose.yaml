@@ -20,7 +20,7 @@ services:
     environment:
       POSTGRES_USER: administrador
       POSTGRES_PASSWORD: administrador
-      POSTGRES_DB: inmo
+      POSTGRES_DB: postgres
     ports:
       - "0.0.0.0:5432:5432"
   adminer:

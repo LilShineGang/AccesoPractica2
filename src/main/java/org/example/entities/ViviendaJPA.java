@@ -1,4 +1,4 @@
-package org.example;
+package org.example.entities;
 
 import jakarta.persistence.*;
 import org.hibernate.annotations.ColumnDefault;
@@ -10,7 +10,7 @@ import java.util.UUID;
 
 @Entity
 @Table(name = "viviendas")
-public class Vivienda {
+public class ViviendaJPA {
     @Id
     @Column(name = "propiedad_id", nullable = false)
     private UUID id;
@@ -19,7 +19,7 @@ public class Vivienda {
     @OneToOne(fetch = FetchType.LAZY, optional = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name = "propiedad_id", nullable = false)
-    private Propiedade propiedades;
+    private PropiedadesJPA propiedades;
 
     @Column(name = "metros_habitables", precision = 10, scale = 2)
     private BigDecimal metrosHabitables;
@@ -48,8 +48,8 @@ public class Vivienda {
     @Column(name = "garaje")
     private Boolean garaje;
 
-    @Column(name = "tipo_vivienda", columnDefinition = "tipo_vivienda_enum not null")
-    private Object tipoVivienda;
+    @Column(name = "tipo_vivienda", nullable = false, columnDefinition = "tipo_vivienda_enum")
+    private String tipoVivienda;
 
     public UUID getId() {
         return id;
@@ -59,11 +59,11 @@ public class Vivienda {
         this.id = id;
     }
 
-    public Propiedade getPropiedades() {
+    public PropiedadesJPA getPropiedades() {
         return propiedades;
     }
 
-    public void setPropiedades(Propiedade propiedades) {
+    public void setPropiedades(PropiedadesJPA propiedades) {
         this.propiedades = propiedades;
     }
 
@@ -123,12 +123,11 @@ public class Vivienda {
         this.garaje = garaje;
     }
 
-    public Object getTipoVivienda() {
+    public String getTipoVivienda() {
         return tipoVivienda;
     }
 
-    public void setTipoVivienda(Object tipoVivienda) {
+    public void setTipoVivienda(String tipoVivienda) {
         this.tipoVivienda = tipoVivienda;
-    }
-
+   }
 }

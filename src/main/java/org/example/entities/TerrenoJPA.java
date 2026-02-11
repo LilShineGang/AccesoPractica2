@@ -1,4 +1,4 @@
-package org.example;
+package org.example.entities;
 
 import jakarta.persistence.*;
 import org.hibernate.annotations.ColumnDefault;
@@ -10,7 +10,7 @@ import java.util.UUID;
 
 @Entity
 @Table(name = "terrenos")
-public class Terreno {
+public class TerrenoJPA {
     @Id
     @Column(name = "propiedad_id", nullable = false)
     private UUID id;
@@ -19,7 +19,7 @@ public class Terreno {
     @OneToOne(fetch = FetchType.LAZY, optional = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name = "propiedad_id", nullable = false)
-    private Propiedade propiedades;
+    private PropiedadesJPA propiedades;
 
     @Column(name = "edificabilidad", precision = 10, scale = 2)
     private BigDecimal edificabilidad;
@@ -36,11 +36,11 @@ public class Terreno {
         this.id = id;
     }
 
-    public Propiedade getPropiedades() {
+    public PropiedadesJPA getPropiedades() {
         return propiedades;
     }
 
-    public void setPropiedades(Propiedade propiedades) {
+    public void setPropiedades(PropiedadesJPA propiedades) {
         this.propiedades = propiedades;
     }
 

@@ -1,15 +1,17 @@
-package org.example;
+package org.example.entities;
 
 import jakarta.persistence.*;
 import org.hibernate.annotations.ColumnDefault;
 
 import java.math.BigDecimal;
 import java.time.Instant;
+import java.util.LinkedHashSet;
+import java.util.Set;
 import java.util.UUID;
 
 @Entity
 @Table(name = "propiedades")
-public class Propiedade {
+public class PropiedadesJPA {
     @Id
     @Column(name = "id", nullable = false)
     private UUID id;
@@ -22,7 +24,7 @@ public class Propiedade {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "localidad_id")
-    private Localidade localidad;
+    private LocalidadesJPA localidad;
 
     @Column(name = "metros_cuadrados", nullable = false, precision = 10, scale = 2)
     private BigDecimal metrosCuadrados;
@@ -46,6 +48,18 @@ public class Propiedade {
     @ColumnDefault("CURRENT_TIMESTAMP")
     @Column(name = "fecha_creacion")
     private Instant fechaCreacion;
+
+    @OneToOne(mappedBy = "propiedades")
+    private LocalesJPA localesJPA;
+
+    @OneToMany
+    private Set<MultimediaJPA> multimediaJPA = new LinkedHashSet<>();
+
+    @OneToOne(mappedBy = "propiedades")
+    private TerrenoJPA terrenoJPA;
+
+    @OneToOne(mappedBy = "propiedades")
+    private ViviendaJPA viviendaJPA;
 
     public UUID getId() {
         return id;
@@ -71,11 +85,11 @@ public class Propiedade {
         this.direccion = direccion;
     }
 
-    public Localidade getLocalidad() {
+    public LocalidadesJPA getLocalidad() {
         return localidad;
     }
 
-    public void setLocalidad(Localidade localidad) {
+    public void setLocalidad(LocalidadesJPA localidad) {
         this.localidad = localidad;
     }
 
@@ -133,6 +147,38 @@ public class Propiedade {
 
     public void setFechaCreacion(Instant fechaCreacion) {
         this.fechaCreacion = fechaCreacion;
+    }
+
+    public LocalesJPA getLocale() {
+        return localesJPA;
+    }
+
+    public void setLocale(LocalesJPA localesJPA) {
+        this.localesJPA = localesJPA;
+    }
+
+    public Set<MultimediaJPA> getMultimedia() {
+        return multimediaJPA;
+    }
+
+    public void setMultimedia(Set<MultimediaJPA> multimediaJPA) {
+        this.multimediaJPA = multimediaJPA;
+    }
+
+    public TerrenoJPA getTerreno() {
+        return terrenoJPA;
+    }
+
+    public void setTerreno(TerrenoJPA terrenoJPA) {
+        this.terrenoJPA = terrenoJPA;
+    }
+
+    public ViviendaJPA getVivienda() {
+        return viviendaJPA;
+    }
+
+    public void setVivienda(ViviendaJPA viviendaJPA) {
+        this.viviendaJPA = viviendaJPA;
     }
 
 }
