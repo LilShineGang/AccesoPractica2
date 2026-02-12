@@ -1,12 +1,10 @@
 package org.example;
 
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.EntityManagerFactory;
-import jakarta.persistence.Persistence;
-import org.example.entities.LocalidadesJPA;
-import org.example.entities.ProvinciaJPA;
-import org.example.entities.ViviendaJPA;
+import jakarta.persistence.*;
+import org.example.entities.*;
+import org.example.modelo.enums.EstadoPropiedad;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.UUID;
 
@@ -151,6 +149,128 @@ public class Main {
         }
     }
 
+    public static void issue() {
+        EntityManagerFactory emf =
+                Persistence.createEntityManagerFactory("default");
+        EntityManager em = emf.createEntityManager();
+
+        List<ProvinciaJPA> provincias = em.createQuery("SELECT p FROM ProvinciaJPA p", ProvinciaJPA.class).getResultList();
+
+        for (ProvinciaJPA provincia : provincias) {
+            System.out.println(provincia.getNombre());
+
+            for (LocalidadesJPA l : provincia.getLocalidades()) {
+                System.out.println("  - " + l.getNombre());
+
+                for (PropiedadesJPA p : l.getPropiedades()) {
+                    System.out.println("    - " + p.getDireccion());
+
+                    System.out.println(p.getMultimedia().size());
+                }
+            }
+        }
+        em.close();
+        emf.close();
+    }
+
+    public static void JoFe() {
+        EntityManagerFactory emf =
+                Persistence.createEntityManagerFactory("default");
+        EntityManager em = emf.createEntityManager();
+
+        try {
+            String jpql = "SELECT DISTINCT p FROM ProvinciaJPA p " +
+                    "LEFT JOIN FETCH p.localidades l " +
+                    "LEFT JOIN FETCH l.propiedadesJPAS prop " +
+                    "LEFT JOIN FETCH prop.multimediaJPA m";
+
+            List<ProvinciaJPA> provincias = em.createQuery(jpql, ProvinciaJPA.class).getResultList();
+
+            for (ProvinciaJPA p : provincias) {
+                System.out.println("Provincia: " + p.getNombre());
+                for (LocalidadesJPA l : p.getLocalidades()) {
+                    System.out.println(" - Localidad: " + l.getNombre());
+                    System.out.println("   * Propiedades cargadas: " + l.getPropiedades().size());
+                }
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            em.close();
+            emf.close();
+        }
+    }
+
+    public static void EnGr() {
+        EntityManagerFactory emf =
+                Persistence.createEntityManagerFactory("default");
+        EntityManager em = emf.createEntityManager();
+
+        try {
+            EntityGraph<ProvinciaJPA> graph = em.createEntityGraph(ProvinciaJPA.class);
+
+            Subgraph<LocalidadesJPA> localidades = graph.addSubgraph("localidades");
+
+            Subgraph<PropiedadesJPA> propiedades = localidades.addSubgraph("propiedades");
+
+            propiedades.addAttributeNodes("multimediaJPA");
+
+            List<ProvinciaJPA> provincias = em.createQuery("SELECT p FROM ProvinciaJPA p", ProvinciaJPA.class).setHint("javax.persistence.loadgraph", graph).getResultList();
+
+            for (ProvinciaJPA p : provincias) {
+                System.out.println("Provincia: " + p.getNombre());
+                for (LocalidadesJPA l : p.getLocalidades()) {
+                    System.out.println(" - Localidad: " + l.getNombre());
+                    System.out.println("   * Propiedades cargadas: " + l.getPropiedades().size());
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            em.close();
+            emf.close();
+        }
+
+    }
+
+    public static void consultaCG() {
+        EntityManagerFactory emf =
+                Persistence.createEntityManagerFactory("default");
+        EntityManager em = emf.createEntityManager();
+
+        String jpql = "SELECT p FROM PropiedadesJPA p";
+        List<PropiedadesJPA> lista = em.createQuery(jpql, PropiedadesJPA.class).getResultList();
+
+        for (PropiedadesJPA p : lista) {
+            System.out.println("ID: " + p.getId() +
+                    "- Precio: " + p.getPrecio() +
+                    "- Metros " + p.getMetros());
+
+            if (p instanceof ViviendaJPA) {
+                ViviendaJPA v = (ViviendaJPA) p;
+                System.out.println("Habitaciones: " + v.getHabitaciones());
+            } else if (p instanceof LocalesJPA) {
+                LocalesJPA l = (LocalesJPA) p;
+                System.out.println("Escaparate: " + l.getEscaparate());
+            } else if (p instanceof TerrenoJPA) {
+                TerrenoJPA t = (TerrenoJPA) p;
+                System.out.println("Urbanizable: "+ t.getUrbanizable());
+
+            }
+        }
+        em.close();
+        emf.close();
+    }
+
+    public static void probarConsultasNombradas() {
+        EntityManagerFactory emf =
+                Persistence.createEntityManagerFactory("default");
+        EntityManager em = emf.createEntityManager();
+
+
+    }
+
     public static void main(String[] args) {
         getProvincias();
         String id_Alicante= "95ccb118-c924-4c5f-8961-3fca7c124123";
@@ -158,6 +278,10 @@ public class Main {
         altaLocalidad();
         modificarVivienda();
         borrarVivienda();
+        issue();
+        JoFe();
+        EnGr();
+        consultaCG();
     }
 
 }

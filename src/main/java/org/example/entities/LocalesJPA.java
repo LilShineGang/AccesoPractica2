@@ -9,7 +9,8 @@ import java.util.UUID;
 
 @Entity
 @Table(name = "locales")
-public class LocalesJPA {
+@PrimaryKeyJoinColumn(name = "propiedad_id")
+public class LocalesJPA extends PropiedadesJPA{
     @Id
     @Column(name = "propiedad_id", nullable = false)
     private UUID id;
