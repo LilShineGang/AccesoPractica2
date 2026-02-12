@@ -1,6 +1,8 @@
 package org.example.entities;
 
 import jakarta.persistence.*;
+import org.example.converters.TipoViviendaConverter;
+import org.example.modelo.enums.TipoVivienda;
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
@@ -10,7 +12,16 @@ import java.util.UUID;
 
 @Entity
 @Table(name = "viviendas")
-public class ViviendaJPA {
+@PrimaryKeyJoinColumn(name = "propiedad_id")
+public class ViviendaJPA extends PropiedadesJPA {
+
+    @Column(name = "tipo_vivienda", columnDefinition = "tipo_vivienda")
+    @Convert(converter = TipoViviendaConverter.class)
+    private TipoVivienda tipo;
+
+    public TipoVivienda getTipo() { return tipo; }
+    public void setTipo(TipoVivienda tipo) { this.tipo = tipo; }
+
     @Id
     @Column(name = "propiedad_id", nullable = false)
     private UUID id;
@@ -48,8 +59,7 @@ public class ViviendaJPA {
     @Column(name = "garaje")
     private Boolean garaje;
 
-    @Column(name = "tipo_vivienda", nullable = false, columnDefinition = "tipo_vivienda_enum")
-    private String tipoVivienda;
+
 
     public UUID getId() {
         return id;
@@ -123,11 +133,5 @@ public class ViviendaJPA {
         this.garaje = garaje;
     }
 
-    public String getTipoVivienda() {
-        return tipoVivienda;
-    }
 
-    public void setTipoVivienda(String tipoVivienda) {
-        this.tipoVivienda = tipoVivienda;
-   }
 }
